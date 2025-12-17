@@ -11,3 +11,8 @@ rules:
   steps:
   - intent: bot_challenge
   - action: utter_iamabot
+
+- rule: Say 'hi' whenever the user greets
+  steps:
+  - intent: greets
+  - actions: utter_greet
