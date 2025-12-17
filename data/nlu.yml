@@ -89,3 +89,14 @@ nlu:
     - are you a human?
     - am I talking to a bot?
     - am I talking to a human?
+
+- intent: angry
+  examples: |
+    - that's non sense!
+    - that's crazy!
+    - are you kidding me?
+    - stop it!
+    - angry
+    - frustrated
+    - I am angry right now
+    - annoyed
