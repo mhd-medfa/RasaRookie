@@ -173,39 +173,6 @@ rasa-project/
 ├── rasa_chatbot.html           # Standalone HTML interface
 └── README.md                    # This file
 ```
-
-### Create Required Files
-
-#### 1. Create `actions/__init__.py`
-```bash
-mkdir -p actions
-touch actions/__init__.py
-```
-
-#### 2. Create `actions/actions.py`
-See the provided `actions.py` file in the project.
-
-#### 3. Create `data/nlu.yml`
-See the provided `nlu.yml` file in the project.
-
-#### 4. Create `data/rules.yml`
-See the provided `rules.yml` file in the project.
-
-#### 5. Create `data/stories.yml`
-See the provided `stories.yml` file in the project.
-
-#### 6. Create `config.yml`
-See the provided `config.yml` file in the project.
-
-#### 7. Create `domain.yml`
-See the provided `domain.yml` file in the project.
-
-#### 8. Create `endpoints.yml`
-```yaml
-action_endpoint:
-  url: "http://localhost:5055/webhook"
-```
-
 ---
 
 ## ⚙️ Configuration
