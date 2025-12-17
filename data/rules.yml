@@ -15,4 +15,4 @@ rules:
 - rule: Say 'hi' whenever the user greets
   steps:
   - intent: greets
-  - actions: utter_greet
+  - action: utter_greet
