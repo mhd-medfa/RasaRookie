@@ -1,18 +1,72 @@
 version: "3.1"
 
 rules:
+  - rule: Greet user
+    steps:
+      - intent: greet
+      - action: action_respond_with_language
 
-- rule: Say goodbye anytime the user says goodbye
-  steps:
-  - intent: goodbye
-  - action: utter_goodbye
+  - rule: Say goodbye
+    steps:
+      - intent: goodbye
+      - action: action_respond_with_language
 
-- rule: Say 'I am a bot' anytime the user challenges
-  steps:
-  - intent: bot_challenge
-  - action: utter_iamabot
+  - rule: Transfer status inquiry
+    steps:
+      - intent: transfer_status
+      - action: action_respond_with_language
 
-- rule: Say 'hi' whenever the user greets
-  steps:
-  - intent: greets
-  - action: utter_greet
+  - rule: Branch locations
+    steps:
+      - intent: branch_locations
+      - action: action_respond_with_language
+
+  - rule: Working hours
+    steps:
+      - intent: working_hours
+      - action: action_respond_with_language
+
+  - rule: Fees inquiry
+    steps:
+      - intent: fees_inquiry
+      - action: action_respond_with_language
+
+  - rule: Exchange rates
+    steps:
+      - intent: exchange_rates
+      - action: action_respond_with_language
+
+  - rule: How to send
+    steps:
+      - intent: how_to_send
+      - action: action_respond_with_language
+
+  - rule: How to receive
+    steps:
+      - intent: how_to_receive
+      - action: action_respond_with_language
+
+  - rule: Required documents
+    steps:
+      - intent: required_documents
+      - action: action_respond_with_language
+
+  - rule: Complaint
+    steps:
+      - intent: complaint
+      - action: action_respond_with_language
+
+  - rule: Speak to human
+    steps:
+      - intent: speak_to_human
+      - action: action_respond_with_language
+
+  - rule: Services list
+    steps:
+      - intent: services_list
+      - action: action_respond_with_language
+
+  - rule: Fallback
+    steps:
+      - intent: nlu_fallback
+      - action: action_respond_with_language

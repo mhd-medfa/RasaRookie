@@ -2,47 +2,51 @@ version: "3.1"
 
 stories:
 
-- story: happy path
+- story: user asks about transfer then fees
   steps:
   - intent: greet
-  - action: utter_greet
-  - intent: mood_great
-  - action: utter_happy
+  - action: action_respond_with_language
+  - intent: transfer_status
+  - action: action_respond_with_language
+  - intent: fees_inquiry
+  - action: action_respond_with_language
+  - intent: goodbye
+  - action: action_respond_with_language
 
-- story: sad path 1
+- story: user asks about branches and hours
   steps:
   - intent: greet
-  - action: utter_greet
-  - intent: mood_unhappy
-  - action: utter_cheer_up
-  - action: utter_did_that_help
-  - intent: affirm
-  - action: utter_happy
+  - action: action_respond_with_language
+  - intent: branch_locations
+  - action: action_respond_with_language
+  - intent: working_hours
+  - action: action_respond_with_language
 
-- story: sad path 2
+- story: user wants to send money
   steps:
   - intent: greet
-  - action: utter_greet
-  - intent: mood_unhappy
-  - action: utter_cheer_up
-  - action: utter_did_that_help
-  - intent: deny
-  - action: utter_goodbye
+  - action: action_respond_with_language
+  - intent: how_to_send
+  - action: action_respond_with_language
+  - intent: required_documents
+  - action: action_respond_with_language
+  - intent: fees_inquiry
+  - action: action_respond_with_language
 
-- story: angry path 1
+- story: user escalates to human agent
   steps:
   - intent: greet
-  - action: utter_greet
-  - intent: angry
-  - action: utter_calm_down
-  - action: utter_did_that_help
-  - intent: affirm
-  - action: utter_happy
-  - action: utter_goodbye
+  - action: action_respond_with_language
+  - intent: complaint
+  - action: action_respond_with_language
+  - intent: speak_to_human
+  - action: action_respond_with_language
 
-- story: interactive_story_1
+- story: exchange rate inquiry
   steps:
-  - intent: order_food
-    entities:
-    - food: pizza
-  - action: processing_order
+  - intent: exchange_rates
+  - action: action_respond_with_language
+  - intent: how_to_send
+  - action: action_respond_with_language
+  - intent: goodbye
+  - action: action_respond_with_language

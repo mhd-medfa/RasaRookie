@@ -1,97 +1,242 @@
 version: "3.1"
+
 nlu:
+# ============================================
+# GREETING INTENT
+# ============================================
 - intent: greet
   examples: |
-    - hey
     - hello
     - hi
-    - hello there
+    - hey
     - good morning
-    - good evening
-    - moin
-    - hey there
-    - let's go
-    - hey dude
-    - goodmorning
-    - goodevening
     - good afternoon
+    - good evening
+    - مرحبا
+    - اهلا
+    - السلام عليكم
+    - صباح الخير
+    - مساء الخير
+    - هلا
+    - اهلين
+    - مرحبتين
+
+# ============================================
+# GOODBYE INTENT
+# ============================================
 - intent: goodbye
   examples: |
-    - cu
-    - good by
-    - cee you later
-    - good night
     - bye
     - goodbye
-    - have a nice day
-    - see you around
-    - bye bye
-    - see you later
-- intent: affirm
+    - see you
+    - thanks bye
+    - thank you goodbye
+    - مع السلامة
+    - باي
+    - شكرا
+    - يعطيك العافية
+    - الله يسلمك
+
+# ============================================
+# TRANSFER STATUS INTENT
+# ============================================
+- intent: transfer_status
   examples: |
-    - yes
-    - y
-    - indeed
-    - of course
-    - that sounds good
-    - correct
-- intent: deny
+    - where is my transfer
+    - check my transfer status
+    - what happened to my money transfer
+    - I sent money where is it
+    - track my transfer
+    - transfer tracking
+    - has my transfer arrived
+    - is my transfer complete
+    - when will my transfer arrive
+    - I want to know about my transfer
+    - وين صارت الحوالة
+    - اريد اعرف وين الحوالة
+    - شو صار بالحوالة
+    - وصلت الحوالة
+    - متى توصل الحوالة
+    - تتبع الحوالة
+    - ابي اتابع حوالتي
+    - فين فلوسي
+    - الحوالة وصلت ولا لا
+    - كم باقي على الحوالة
+
+# ============================================
+# BRANCH LOCATIONS INTENT
+# ============================================
+- intent: branch_locations
   examples: |
-    - no
-    - n
-    - never
-    - I don't think so
-    - don't like that
-    - no way
-    - not really
-- intent: mood_great
+    - where are your branches
+    - branch locations
+    - find a branch
+    - nearest branch
+    - where is the [Dubai](branch_name) branch
+    - where is [Sharjah](branch_name) office
+    - branches in [Ajman](branch_name)
+    - do you have a branch in [Abu Dhabi](branch_name)
+    - your locations
+    - فروعكم وين
+    - اين الفروع
+    - ابي اعرف الفروع
+    - وين اقرب فرع
+    - فرع [دبي](branch_name)
+    - وين فرع [الشارقة](branch_name)
+    - عندكم فرع في [عجمان](branch_name)
+    - فروع [أبو ظبي](branch_name)
+    - مكاتبكم فين
+
+# ============================================
+# WORKING HOURS INTENT
+# ============================================
+- intent: working_hours
   examples: |
-    - perfect
-    - great
-    - amazing
-    - feeling like a king
-    - wonderful
-    - I am feeling very good
-    - I am great
-    - I am amazing
-    - I am going to save the world
-    - super stoked
-    - extremely good
-    - so so perfect
-    - so good
-    - so perfect
-- intent: mood_unhappy
+    - what are your working hours
+    - when are you open
+    - opening hours
+    - what time do you close
+    - are you open on friday
+    - weekend hours
+    - شو ساعات العمل
+    - متى تفتحون
+    - اوقات الدوام
+    - متى تسكرون
+    - مفتوحين يوم الجمعة
+    - ساعات العمل
+    - الدوام من كم لكم
+
+# ============================================
+# FEES INQUIRY INTENT
+# ============================================
+- intent: fees_inquiry
   examples: |
-    - my day was horrible
-    - I am sad
-    - I don't feel very well
-    - I am disappointed
-    - super sad
-    - I'm so sad
-    - sad
-    - very sad
-    - unhappy
-    - not good
-    - not very good
-    - extremly sad
-    - so saad
-    - so sad
-- intent: bot_challenge
+    - what are your fees
+    - how much do you charge
+    - transfer fees
+    - commission rates
+    - how much for sending [100](amount) [dollars](currency)
+    - fees for [USD](currency) transfer
+    - what is the commission
+    - كم العمولة
+    - شو الرسوم
+    - كم تاخذون على التحويل
+    - رسوم التحويل
+    - عمولة ارسال [دولار](currency)
+    - كم رسوم [100](amount) [يورو](currency)
+    - نسبة العمولة كم
+
+# ============================================
+# EXCHANGE RATES INTENT
+# ============================================
+- intent: exchange_rates
   examples: |
-    - are you a bot?
-    - are you a human?
-    - am I talking to a bot?
-    - am I talking to a human?
-- intent: angry
+    - what is the exchange rate
+    - exchange rate for [USD](currency)
+    - [dollar](currency) rate
+    - [euro](currency) exchange rate
+    - how much is [USD](currency) to syrian pound
+    - current rates
+    - سعر الصرف
+    - كم سعر [الدولار](currency)
+    - سعر [اليورو](currency)
+    - سعر الصرف اليوم
+    - كم [الدولار](currency) بالليرة
+    - اسعار العملات
+
+# ============================================
+# HOW TO SEND MONEY INTENT
+# ============================================
+- intent: how_to_send
   examples: |
-    - that's non sense!
-    - that's crazy!
-    - are you kidding me?
-    - stop it!
-    - angry
-    - frustrated
-    - I am angry right now
-    - annoyed
-- intent: order_food
+    - how do I send money
+    - how to make a transfer
+    - I want to send money
+    - steps to send transfer
+    - how can I transfer money
+    - send money to [UAE](country)
+    - كيف ارسل حوالة
+    - ابي ارسل فلوس
+    - طريقة الارسال
+    - كيف احول فلوس
+    - خطوات ارسال حوالة
+    - ارسال فلوس ل[الامارات](country)
+
+# ============================================
+# HOW TO RECEIVE MONEY INTENT
+# ============================================
+- intent: how_to_receive
   examples: |
-    - I want to order a [pizza](food)
+    - how do I receive money
+    - how to collect transfer
+    - I want to receive a transfer
+    - what documents to receive money
+    - pick up transfer
+    - كيف استلم حوالة
+    - ابي استلم فلوس
+    - طريقة الاستلام
+    - شو الاوراق للاستلام
+    - كيف اقبض الحوالة
+
+# ============================================
+# REQUIRED DOCUMENTS INTENT
+# ============================================
+- intent: required_documents
+  examples: |
+    - what documents do I need
+    - required documents
+    - what ID do you accept
+    - do I need passport
+    - what papers are needed
+    - شو الاوراق المطلوبة
+    - شو المستندات
+    - ايش احتاج اوراق
+    - هل تحتاجون جواز سفر
+    - الوثائق المطلوبة
+
+# ============================================
+# COMPLAINT INTENT
+# ============================================
+- intent: complaint
+  examples: |
+    - I have a complaint
+    - I want to complain
+    - file a complaint
+    - something went wrong
+    - I have a problem
+    - this is unacceptable
+    - عندي شكوى
+    - ابي اشتكي
+    - في مشكلة
+    - ما عجبني الخدمة
+    - اريد اقدم شكوى
+
+# ============================================
+# SPEAK TO HUMAN INTENT
+# ============================================
+- intent: speak_to_human
+  examples: |
+    - I want to speak to a human
+    - connect me to an agent
+    - talk to customer service
+    - real person please
+    - human agent
+    - بدي احكي مع موظف
+    - وصلني على شخص
+    - اريد اتكلم مع انسان
+    - موظف خدمة العملاء
+    - حولني على موظف
+
+# ============================================
+# SERVICES LIST INTENT
+# ============================================
+- intent: services_list
+  examples: |
+    - what services do you offer
+    - your services
+    - what can you do
+    - list of services
+    - شو خدماتكم
+    - ايش تقدمون
+    - الخدمات المتوفرة
+    - شو الخدمات عندكم
