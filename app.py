@@ -1,6 +1,5 @@
 import streamlit as st
 import requests
-import json
 from datetime import datetime
 
 # Page configuration
@@ -11,21 +10,25 @@ st.set_page_config(
     initial_sidebar_state="collapsed"
 )
 
-# Custom CSS for ChatGPT/Claude-like interface with Arabic support
+# Custom CSS for Light Theme with proper Arabic support
 st.markdown("""
 <style>
     /* Import beautiful Arabic-friendly fonts */
-    @import url('https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700&family=IBM+Plex+Sans+Arabic:wght@300;400;500;600&family=Space+Grotesk:wght@400;500;600;700&display=swap');
+    @import url('https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700&family=Tajawal:wght@300;400;500;700&family=Space+Grotesk:wght@400;500;600;700&display=swap');
     
     /* Hide Streamlit branding */
     #MainMenu {visibility: hidden;}
     footer {visibility: hidden;}
     header {visibility: hidden;}
     
-    /* Main container styling */
+    /* Main container styling - Light Theme */
     .stApp {
-        background: linear-gradient(135deg, #0f0f23 0%, #1a1a2e 50%, #16213e 100%);
-        font-family: 'IBM Plex Sans Arabic', 'Cairo', sans-serif;
+        background: linear-gradient(135deg, #f5f7fa 0%, #e4e8ec 50%, #f0f4f8 100%);
+    }
+    
+    /* Global Arabic font fix */
+    * {
+        font-family: 'Tajawal', 'Cairo', 'Arial', sans-serif !important;
     }
     
     /* Chat container */
@@ -40,25 +43,25 @@ st.markdown("""
     .chat-header {
         text-align: center;
         padding: 2rem 0 3rem 0;
-        background: linear-gradient(180deg, rgba(255,255,255,0.05) 0%, transparent 100%);
+        background: linear-gradient(180deg, rgba(255,255,255,0.9) 0%, rgba(255,255,255,0.5) 100%);
         border-radius: 20px;
         margin-bottom: 2rem;
         backdrop-filter: blur(10px);
-        border: 1px solid rgba(255, 255, 255, 0.1);
+        border: 1px solid rgba(0, 100, 80, 0.15);
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
     }
     
     .chat-header h1 {
-        color: #ffd700;
-        font-family: 'Space Grotesk', 'Cairo', sans-serif;
+        color: #006450;
+        font-family: 'Tajawal', 'Cairo', sans-serif !important;
         font-weight: 700;
         font-size: 2.5rem;
         margin: 0;
-        text-shadow: 0 0 30px rgba(255, 215, 0, 0.3);
         letter-spacing: -0.5px;
     }
     
     .chat-header p {
-        color: rgba(255, 255, 255, 0.7);
+        color: #555;
         font-size: 1.1rem;
         margin-top: 0.5rem;
         font-weight: 300;
@@ -70,6 +73,7 @@ st.markdown("""
         margin-bottom: 1.5rem;
         animation: slideIn 0.3s ease-out;
         gap: 1rem;
+        align-items: flex-start;
     }
     
     @keyframes slideIn {
@@ -84,230 +88,117 @@ st.markdown("""
     }
     
     .message.user {
-        justify-content: flex-end;
-        direction: rtl;
+        flex-direction: row-reverse;
     }
     
     .message.bot {
-        justify-content: flex-start;
-        direction: rtl;
+        flex-direction: row;
     }
     
     .message-avatar {
-        width: 40px;
-        height: 40px;
+        width: 44px;
+        height: 44px;
         border-radius: 50%;
         display: flex;
         align-items: center;
         justify-content: center;
-        font-size: 1.2rem;
+        font-size: 1.3rem;
         flex-shrink: 0;
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
-    }
-    
-    .message.user .message-avatar {
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-        order: 1;
-    }
-    
-    .message.bot .message-avatar {
-        background: linear-gradient(135deg, #ffd700 0%, #ffed4e 100%);
-        color: #1a1a2e;
-        font-weight: 700;
-    }
-    
-    .message-content {
-        max-width: 70%;
-        padding: 1rem 1.5rem;
-        border-radius: 18px;
-        line-height: 1.6;
-        font-size: 1rem;
-        direction: rtl;
-        text-align: right;
-        position: relative;
-        word-wrap: break-word;
         box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
     }
     
+    .message.user .message-avatar {
+        background: linear-gradient(135deg, #4a90d9 0%, #357abd 100%);
+    }
+    
+    .message.bot .message-avatar {
+        background: linear-gradient(135deg, #006450 0%, #008060 100%);
+        color: white;
+        font-weight: 700;
+    }
+    
+    .message-wrapper {
+        max-width: 70%;
+        display: flex;
+        flex-direction: column;
+    }
+    
+    .message.user .message-wrapper {
+        align-items: flex-end;
+    }
+    
+    .message.bot .message-wrapper {
+        align-items: flex-start;
+    }
+    
+    .message-content {
+        padding: 1rem 1.5rem;
+        border-radius: 18px;
+        line-height: 1.8;
+        font-size: 1.05rem;
+        direction: rtl;
+        text-align: right;
+        word-wrap: break-word;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+        font-family: 'Tajawal', 'Cairo', sans-serif !important;
+        unicode-bidi: plaintext;
+    }
+    
     .message.user .message-content {
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        background: linear-gradient(135deg, #4a90d9 0%, #357abd 100%);
         color: white;
         border-bottom-right-radius: 4px;
-        order: 0;
     }
     
     .message.bot .message-content {
-        background: rgba(255, 255, 255, 0.95);
-        color: #1a1a2e;
+        background: white;
+        color: #333;
         border-bottom-left-radius: 4px;
-        border: 1px solid rgba(255, 215, 0, 0.2);
+        border: 1px solid rgba(0, 100, 80, 0.15);
     }
     
     /* Timestamp */
     .message-time {
         font-size: 0.75rem;
-        color: rgba(255, 255, 255, 0.4);
-        margin-top: 0.3rem;
-        text-align: right;
-        direction: rtl;
-    }
-    
-    .message.user .message-time {
-        text-align: left;
-    }
-    
-    /* Input area */
-    .stTextInput > div > div > input {
-        background: rgba(255, 255, 255, 0.1) !important;
-        border: 2px solid rgba(255, 215, 0, 0.3) !important;
-        border-radius: 24px !important;
-        padding: 1rem 1.5rem !important;
-        color: white !important;
-        font-size: 1rem !important;
-        direction: rtl !important;
-        text-align: right !important;
-        font-family: 'IBM Plex Sans Arabic', 'Cairo', sans-serif !important;
-        transition: all 0.3s ease !important;
-        backdrop-filter: blur(10px) !important;
-    }
-    
-    .stTextInput > div > div > input:focus {
-        border-color: #ffd700 !important;
-        box-shadow: 0 0 0 3px rgba(255, 215, 0, 0.1) !important;
-        background: rgba(255, 255, 255, 0.15) !important;
-    }
-    
-    .stTextInput > div > div > input::placeholder {
-        color: rgba(255, 255, 255, 0.5) !important;
-        direction: rtl !important;
-    }
-    
-    /* Send button */
-    .stButton > button {
-        background: linear-gradient(135deg, #ffd700 0%, #ffed4e 100%) !important;
-        color: #1a1a2e !important;
-        border: none !important;
-        border-radius: 24px !important;
-        padding: 0.75rem 2.5rem !important;
-        font-weight: 600 !important;
-        font-size: 1rem !important;
-        transition: all 0.3s ease !important;
-        box-shadow: 0 4px 15px rgba(255, 215, 0, 0.3) !important;
-        font-family: 'Cairo', sans-serif !important;
-    }
-    
-    .stButton > button:hover {
-        transform: translateY(-2px) !important;
-        box-shadow: 0 6px 20px rgba(255, 215, 0, 0.4) !important;
-    }
-    
-    .stButton > button:active {
-        transform: translateY(0) !important;
-    }
-    
-    /* Clear chat button */
-    .clear-button {
-        background: rgba(255, 255, 255, 0.1) !important;
-        color: rgba(255, 255, 255, 0.7) !important;
-        border: 1px solid rgba(255, 255, 255, 0.2) !important;
-        border-radius: 12px !important;
-        padding: 0.5rem 1.5rem !important;
-        font-size: 0.9rem !important;
-        font-family: 'Cairo', sans-serif !important;
-        transition: all 0.3s ease !important;
-    }
-    
-    .clear-button:hover {
-        background: rgba(255, 255, 255, 0.15) !important;
-        border-color: rgba(255, 255, 255, 0.3) !important;
-        color: white !important;
-    }
-    
-    /* Loading animation */
-    .typing-indicator {
-        display: flex;
-        gap: 5px;
-        padding: 1rem;
+        color: #888;
+        margin-top: 0.4rem;
         direction: ltr;
     }
     
-    .typing-indicator span {
-        width: 8px;
-        height: 8px;
-        border-radius: 50%;
-        background: rgba(255, 215, 0, 0.7);
-        animation: bounce 1.4s infinite ease-in-out;
+    .message.user .message-time {
+        text-align: right;
+        padding-right: 0.5rem;
     }
     
-    .typing-indicator span:nth-child(1) {
-        animation-delay: -0.32s;
-    }
-    
-    .typing-indicator span:nth-child(2) {
-        animation-delay: -0.16s;
-    }
-    
-    @keyframes bounce {
-        0%, 80%, 100% {
-            transform: scale(0);
-        }
-        40% {
-            transform: scale(1);
-        }
+    .message.bot .message-time {
+        text-align: left;
+        padding-left: 0.5rem;
     }
     
     /* Welcome message */
     .welcome-card {
-        background: rgba(255, 255, 255, 0.05);
-        border: 1px solid rgba(255, 215, 0, 0.2);
+        background: white;
+        border: 1px solid rgba(0, 100, 80, 0.15);
         border-radius: 20px;
         padding: 2rem;
         margin-bottom: 2rem;
-        backdrop-filter: blur(10px);
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
         text-align: center;
         direction: rtl;
     }
     
     .welcome-card h3 {
-        color: #ffd700;
+        color: #006450;
         margin-bottom: 1rem;
-        font-family: 'Cairo', sans-serif;
+        font-family: 'Tajawal', 'Cairo', sans-serif !important;
         font-weight: 600;
+        font-size: 1.5rem;
     }
     
     .welcome-card p {
-        color: rgba(255, 255, 255, 0.8);
-        line-height: 1.8;
-        font-size: 1rem;
-    }
-    
-    /* Suggestion chips */
-    .suggestion-chips {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 0.75rem;
-        margin-top: 1.5rem;
-        justify-content: center;
-        direction: rtl;
-    }
-    
-    .chip {
-        background: rgba(255, 255, 255, 0.1);
-        border: 1px solid rgba(255, 215, 0, 0.3);
-        border-radius: 20px;
-        padding: 0.5rem 1.2rem;
-        color: rgba(255, 255, 255, 0.9);
-        font-size: 0.9rem;
-        cursor: pointer;
-        transition: all 0.3s ease;
-        backdrop-filter: blur(5px);
-    }
-    
-    .chip:hover {
-        background: rgba(255, 215, 0, 0.2);
-        border-color: #ffd700;
-        color: #ffd700;
-        transform: translateY(-2px);
+        color: #555;
+        line-height: 2;
+        font-size: 1.05rem;
     }
     
     /* Scrollbar */
@@ -316,25 +207,60 @@ st.markdown("""
     }
     
     ::-webkit-scrollbar-track {
-        background: rgba(255, 255, 255, 0.05);
+        background: rgba(0, 0, 0, 0.05);
     }
     
     ::-webkit-scrollbar-thumb {
-        background: rgba(255, 215, 0, 0.3);
+        background: rgba(0, 100, 80, 0.3);
         border-radius: 4px;
     }
     
     ::-webkit-scrollbar-thumb:hover {
-        background: rgba(255, 215, 0, 0.5);
+        background: rgba(0, 100, 80, 0.5);
     }
     
     /* Footer info */
     .footer-info {
         text-align: center;
-        color: rgba(255, 255, 255, 0.4);
+        color: #888;
         font-size: 0.85rem;
         padding: 2rem 0 1rem 0;
         direction: rtl;
+    }
+    
+    /* Chat input customization */
+    .stChatInput {
+        border-color: rgba(0, 100, 80, 0.3) !important;
+    }
+    
+    .stChatInput > div {
+        background: white !important;
+        border: 2px solid rgba(0, 100, 80, 0.2) !important;
+        border-radius: 24px !important;
+    }
+    
+    .stChatInput textarea {
+        font-family: 'Tajawal', 'Cairo', sans-serif !important;
+        font-size: 1rem !important;
+    }
+    
+    /* Clear button styling */
+    .stButton > button {
+        background: linear-gradient(135deg, #006450 0%, #008060 100%) !important;
+        color: white !important;
+        border: none !important;
+        border-radius: 12px !important;
+        padding: 0.5rem 1.5rem !important;
+        font-weight: 600 !important;
+        font-size: 0.9rem !important;
+        transition: all 0.3s ease !important;
+        box-shadow: 0 2px 10px rgba(0, 100, 80, 0.2) !important;
+        font-family: 'Tajawal', 'Cairo', sans-serif !important;
+    }
+    
+    .stButton > button:hover {
+        transform: translateY(-2px) !important;
+        box-shadow: 0 4px 15px rgba(0, 100, 80, 0.3) !important;
     }
 </style>
 """, unsafe_allow_html=True)
@@ -344,6 +270,8 @@ if 'messages' not in st.session_state:
     st.session_state.messages = []
 if 'sender_id' not in st.session_state:
     st.session_state.sender_id = f"user_{datetime.now().strftime('%Y%m%d%H%M%S')}"
+if 'last_input' not in st.session_state:
+    st.session_state.last_input = ""
 
 # Rasa configuration
 RASA_SERVER_URL = "http://localhost:5005/webhooks/rest/webhook"
@@ -368,11 +296,14 @@ def display_message(role: str, content: str, timestamp: str = None):
     
     avatar = "👤" if role == "user" else "💰"
     
+    # Escape HTML but preserve line breaks
+    safe_content = content.replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;").replace("\n", "<br>")
+    
     st.markdown(f"""
     <div class="message {role}">
         <div class="message-avatar">{avatar}</div>
-        <div>
-            <div class="message-content">{content}</div>
+        <div class="message-wrapper">
+            <div class="message-content">{safe_content}</div>
             <div class="message-time">{timestamp}</div>
         </div>
     </div>
@@ -392,25 +323,15 @@ if not st.session_state.messages:
     <div class="welcome-card">
         <h3>👋 أهلاً وسهلاً بك!</h3>
         <p>
-            أنا المساعد الذكي للمدفع. يمكنني مساعدتك في:<br>
+            أنا المساعد الذكي للمدفع. يمكنني مساعدتك في:<br><br>
             ✓ الاستعلام عن الحوالات المالية<br>
             ✓ معرفة مواقع الفروع وأوقات العمل<br>
             ✓ السؤال عن الرسوم وأسعار الصرف<br>
             ✓ خطوات إرسال واستلام الأموال
         </p>
-        <p style="margin-top: 1rem; font-size: 0.9rem; opacity: 0.7;">
+        <p style="margin-top: 1.5rem; font-size: 0.95rem; opacity: 0.7;">
             Welcome! I'm Al-Mdfaa's AI assistant. I can help you with transfers, branches, fees, and exchange rates.
         </p>
-    </div>
-    """, unsafe_allow_html=True)
-    
-    # Suggestion chips
-    st.markdown("""
-    <div class="suggestion-chips">
-        <div class="chip" onclick="document.querySelector('input').value='أين الفروع؟'">📍 أين الفروع؟</div>
-        <div class="chip" onclick="document.querySelector('input').value='ما هي الرسوم؟'">💵 ما هي الرسوم؟</div>
-        <div class="chip" onclick="document.querySelector('input').value='أسعار الصرف'">💱 أسعار الصرف</div>
-        <div class="chip" onclick="document.querySelector('input').value='كيف أرسل حوالة؟'">📤 كيف أرسل حوالة؟</div>
     </div>
     """, unsafe_allow_html=True)
 
@@ -418,28 +339,23 @@ if not st.session_state.messages:
 for msg in st.session_state.messages:
     display_message(msg["role"], msg["content"], msg.get("timestamp"))
 
-# Chat input area
-col1, col2 = st.columns([5, 1])
-
-with col1:
-    user_input = st.text_input(
-        "Message",
-        placeholder="اكتب رسالتك هنا... Type your message here...",
-        key="user_input",
-        label_visibility="collapsed"
-    )
-
-with col2:
-    send_button = st.button("إرسال", use_container_width=True)
-
-# Clear chat button (in sidebar or bottom)
+# Clear chat button at the top if there are messages
 if st.session_state.messages:
-    if st.button("🗑️ مسح المحادثة", key="clear_chat", help="Clear conversation"):
-        st.session_state.messages = []
-        st.rerun()
+    col1, col2, col3 = st.columns([2, 1, 2])
+    with col2:
+        if st.button("🗑️ مسح المحادثة", key="clear_chat", use_container_width=True):
+            st.session_state.messages = []
+            st.session_state.last_input = ""
+            st.rerun()
 
-# Handle send button or Enter key
-if send_button and user_input:
+# Chat input using st.chat_input
+user_input = st.chat_input("اكتب رسالتك هنا... Type your message here...")
+
+# Handle message input with duplicate prevention
+if user_input and user_input != st.session_state.last_input:
+    # Store this input to prevent duplicates
+    st.session_state.last_input = user_input
+    
     # Add user message
     timestamp = datetime.now().strftime("%H:%M")
     st.session_state.messages.append({
@@ -448,23 +364,8 @@ if send_button and user_input:
         "timestamp": timestamp
     })
     
-    # Show typing indicator
-    with st.spinner(""):
-        st.markdown("""
-        <div class="message bot">
-            <div class="message-avatar">💰</div>
-            <div class="message-content">
-                <div class="typing-indicator">
-                    <span></span>
-                    <span></span>
-                    <span></span>
-                </div>
-            </div>
-        </div>
-        """, unsafe_allow_html=True)
-        
-        # Get response from Rasa
-        responses = send_message_to_rasa(user_input, st.session_state.sender_id)
+    # Get response from Rasa
+    responses = send_message_to_rasa(user_input, st.session_state.sender_id)
     
     # Add bot responses
     for response in responses:
