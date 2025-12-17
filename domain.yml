@@ -8,6 +8,7 @@ intents:
   - mood_great
   - mood_unhappy
   - bot_challenge
+  - angry
 
 responses:
   utter_greet:
@@ -29,6 +30,8 @@ responses:
   utter_iamabot:
   - text: "I am a bot, powered by Rasa."
 
+  utter_calm_down:
+  - text: "Please, calm down. Everything will be okay!"
 session_config:
   session_expiration_time: 60
   carry_over_slots_to_new_session: true
