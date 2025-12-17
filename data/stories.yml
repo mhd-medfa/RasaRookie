@@ -28,3 +28,14 @@ stories:
   - action: utter_did_that_help
   - intent: deny
   - action: utter_goodbye
+
+- story: angry path 1
+  steps:
+  - intent: greet
+  - action: utter_greet
+  - intent: angry
+  - action: utter_calm_down
+  - action: utter_did_that_help
+  - intent: affirm
+  - action: utter_happy
+  - action: utter_goodbye
