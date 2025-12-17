@@ -188,6 +188,7 @@ RasaRookie/
 ├── chatbot.html                 # Standalone HTML interface
 └── README.md                    # This file
 ```
+<<<<<<< HEAD
 
 ---
 
@@ -205,6 +206,11 @@ rasa train
 ```
 
 **Training time:** 2-5 minutes depending on hardware.
+=======
+---
+
+## ⚙️ Configuration
+>>>>>>> ffd18d8eb9c5cfc1d6e374c8751b8580689c1658
 
 You'll see some deprecation warnings — these are normal and don't affect functionality.
 
