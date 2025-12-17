@@ -39,3 +39,10 @@ stories:
   - intent: affirm
   - action: utter_happy
   - action: utter_goodbye
+
+- story: interactive_story_1
+  steps:
+  - intent: order_food
+    entities:
+    - food: pizza
+  - action: processing_order
