@@ -1,37 +1,148 @@
-version: '3.1'
+version: "3.1"
+
 intents:
-- affirm
-- angry
-- bot_challenge
-- deny
-- goodbye
-- greet
-- mood_great
-- mood_unhappy
-- order_food
-- processing_order
+  - greet
+  - goodbye
+  - transfer_status
+  - branch_locations
+  - working_hours
+  - fees_inquiry
+  - exchange_rates
+  - how_to_send
+  - how_to_receive
+  - required_documents
+  - complaint
+  - speak_to_human
+  - services_list
+
+entities:
+  - branch_name
+  - currency
+  - amount
+  - country
+
+slots:
+  branch_name:
+    type: text
+    mappings:
+      - type: from_entity
+        entity: branch_name
+  currency:
+    type: text
+    mappings:
+      - type: from_entity
+        entity: currency
+  detected_language:
+    type: text
+    mappings:
+      - type: custom
+
+actions:
+  - action_respond_with_language
+  - utter_greet
 responses:
-  utter_greet:
-  - text: Hey! How are you?
-  utter_cheer_up:
-  - text: 'Here is something to cheer you up:'
-    image: https://i.imgur.com/nGF1K8f.jpg
-  utter_did_that_help:
-  - text: Did that help you?
-  utter_happy:
-  - text: Great, carry on!
-  utter_goodbye:
-  - text: Bye
-  utter_iamabot:
-  - text: I am a bot, powered by Rasa.
-  utter_calm_down:
-  - text: Please, calm down. Everything will be okay!
-  processing_order:
-  - text: Sure, on it! Anything else you want?
+  # ============ GREETINGS ============
+  utter_greet_en:
+    - text: "Hello! Welcome to Al-Mdfaa Financial Services. How can I help you today?"
+    - text: "Hi there! I'm the Al-Mdfaa assistant. What can I do for you?"
+
+  utter_greet_ar:
+    - text: "أهلاً وسهلاً بك في المدفع للخدمات المالية. كيف يمكنني مساعدتك؟"
+    - text: "مرحباً! أنا المساعد الآلي للمدفع. كيف أقدر أساعدك اليوم؟"
+
+  # ============ GOODBYE ============
+  utter_goodbye_en:
+    - text: "Thank you for contacting Al-Mdfaa. Have a great day!"
+    - text: "Goodbye! Feel free to reach out if you need any help."
+
+  utter_goodbye_ar:
+    - text: "شكراً لتواصلك مع المدفع. نتمنى لك يوماً سعيداً!"
+    - text: "مع السلامة! لا تتردد في التواصل معنا في أي وقت."
+
+  # ============ TRANSFER STATUS ============
+  utter_transfer_status_en:
+    - text: "To check your transfer status, please provide your transfer reference number. You can also:\n• Visit any Al-Mdfaa branch with your ID\n• Call our hotline: 1234-567-890\n\nTransfers typically take 1-24 hours depending on the destination."
+
+  utter_transfer_status_ar:
+    - text: "للاستعلام عن حوالتك، يرجى تزويدنا برقم المرجع. يمكنك أيضاً:\n• زيارة أي فرع من فروع المدفع مع هويتك\n• الاتصال على الخط الساخن: 1234-567-890\n\nالحوالات تستغرق عادة من 1-24 ساعة حسب الوجهة."
+
+  # ============ BRANCH LOCATIONS ============
+  utter_branch_locations_en:
+    - text: "Al-Mdfaa has branches in:\n\n📍 Dubai - Main Branch\n📍 Sharjah - City Center\n📍 Ajman - Al-Dablan Area\n📍 Abu Dhabi - Port Road\n\nAll branches open 9 AM - 6 PM (Sat-Thu)"
+
+  utter_branch_locations_ar:
+    - text: "فروع المدفع:\n\n📍 دبي - الفرع الرئيسي: \n📍 الشارقة - وسط المدينة\n📍 عجمان - منطقة الدبلان\n📍 أبو ظبي - طريق المرفأ\n\nجميع الفروع تعمل من 9 صباحاً - 6 مساءً (السبت-الخميس)"
+
+  # ============ WORKING HOURS ============
+  utter_working_hours_en:
+    - text: "Our working hours:\n\n🕐 Saturday - Thursday: 9:00 AM - 6:00 PM\n🕐 Friday: Closed\n\nOnline services available 24/7"
+
+  utter_working_hours_ar:
+    - text: "أوقات الدوام:\n\n🕐 السبت - الخميس: 9:00 صباحاً - 6:00 مساءً\n🕐 الجمعة: مغلق\n\nالخدمات الإلكترونية متاحة على مدار الساعة"
+
+  # ============ FEES ============
+  utter_fees_en:
+    - text: "Our transfer fees:\n\n💰 Up to $500: 2% (min $5)\n💰 $500 - $2000: 1.5%\n💰 Above $2000: 1%\n\nNo hidden charges. Final amount shown before confirmation."
+
+  utter_fees_ar:
+    - text: "رسوم التحويل:\n\n💰 حتى 500$: 2% (الحد الأدنى 5$)\n💰 500$ - 2000$: 1.5%\n💰 أكثر من 2000$: 1%\n\nلا توجد رسوم مخفية. المبلغ النهائي يظهر قبل التأكيد."
+
+  # ============ EXCHANGE RATES ============
+  utter_exchange_rates_en:
+    - text: "Today's exchange rates (approximate):\n\n🇺🇸 USD: Buy 14,500 / Sell 14,600\n🇪🇺 EUR: Buy 15,800 / Sell 15,900\n🇸🇦 SAR: Buy 3,850 / Sell 3,900\n\nRates updated daily. Visit branch for exact rates."
+
+  utter_exchange_rates_ar:
+    - text: "أسعار الصرف اليوم (تقريبية):\n\n🇺🇸 دولار: شراء 14,500 / بيع 14,600\n🇪🇺 يورو: شراء 15,800 / بيع 15,900\n🇸🇦 ريال: شراء 3,850 / بيع 3,900\n\nالأسعار تتحدث يومياً. زر الفرع للأسعار الدقيقة."
+
+  # ============ HOW TO SEND ============
+  utter_how_to_send_en:
+    - text: "To send money with Al-Mdfaa:\n\n1️⃣ Visit any branch with your ID\n2️⃣ Fill the transfer form\n3️⃣ Provide recipient details\n4️⃣ Pay amount + fees\n5️⃣ Get your reference number\n\nRecipient can collect within 1-24 hours."
+
+  utter_how_to_send_ar:
+    - text: "لإرسال حوالة مع المدفع:\n\n1️⃣ زر أي فرع مع هويتك\n2️⃣ املأ نموذج التحويل\n3️⃣ قدم بيانات المستلم\n4️⃣ ادفع المبلغ + الرسوم\n5️⃣ احصل على رقم المرجع\n\nيمكن للمستلم الاستلام خلال 1-24 ساعة."
+
+  # ============ HOW TO RECEIVE ============
+  utter_how_to_receive_en:
+    - text: "To receive money:\n\n1️⃣ Get the transfer reference number from sender\n2️⃣ Visit any Al-Mdfaa branch\n3️⃣ Bring valid ID (passport or national ID)\n4️⃣ Provide reference number\n5️⃣ Collect your money\n\nNo fees for receiving!"
+
+  utter_how_to_receive_ar:
+    - text: "لاستلام حوالة:\n\n1️⃣ احصل على رقم المرجع من المرسل\n2️⃣ زر أي فرع من فروع المدفع\n3️⃣ أحضر هوية سارية (جواز سفر أو بطاقة وطنية)\n4️⃣ قدم رقم المرجع\n5️⃣ استلم أموالك\n\nلا توجد رسوم على الاستلام!"
+
+  # ============ REQUIRED DOCUMENTS ============
+  utter_required_documents_en:
+    - text: "Required documents:\n\n📄 For Sending:\n• Valid ID (passport/national ID)\n• Recipient full name & location\n\n📄 For Receiving:\n• Valid ID matching the transfer\n• Transfer reference number"
+
+  utter_required_documents_ar:
+    - text: "المستندات المطلوبة:\n\n📄 للإرسال:\n• هوية سارية (جواز سفر/بطاقة وطنية)\n• اسم المستلم الكامل وموقعه\n\n📄 للاستلام:\n• هوية سارية مطابقة للحوالة\n• رقم مرجع الحوالة"
+
+  # ============ COMPLAINT ============
+  utter_complaint_en:
+    - text: "I'm sorry to hear you have a concern. To file a complaint:\n\n📞 Call: 1234-567-890\n📧 Email: complaints@almdfaa.com\n🏢 Visit any branch\n\nWe take all complaints seriously and respond within 48 hours."
+
+  utter_complaint_ar:
+    - text: "نأسف لسماع ذلك. لتقديم شكوى:\n\n📞 اتصل: 1234-567-890\n📧 إيميل: complaints@almdfaa.com\n🏢 زر أي فرع\n\nنتعامل مع جميع الشكاوى بجدية ونرد خلال 48 ساعة."
+
+  # ============ SPEAK TO HUMAN ============
+  utter_speak_to_human_en:
+    - text: "I'll connect you with a customer service agent. Please wait...\n\n📞 Or call us directly: 1234-567-890\n⏰ Available: Sat-Thu, 9AM-6PM"
+
+  utter_speak_to_human_ar:
+    - text: "سأقوم بتحويلك لموظف خدمة العملاء. يرجى الانتظار...\n\n📞 أو اتصل مباشرة: 1234-567-890\n⏰ متاح: السبت-الخميس، 9ص-6م"
+
+  # ============ SERVICES LIST ============
+  utter_services_en:
+    - text: "Al-Mdfaa services:\n\n💸 Money Transfers (local & international)\n💱 Currency Exchange\n💳 Bill Payments\n📱 Mobile Top-up\n🏦 Bank Deposits\n\nAll services available at any branch."
+
+  utter_services_ar:
+    - text: "خدمات المدفع:\n\n💸 الحوالات المالية (محلية ودولية)\n💱 صرف العملات\n💳 دفع الفواتير\n📱 شحن رصيد الموبايل\n🏦 الإيداع البنكي\n\nجميع الخدمات متوفرة في أي فرع."
+
+  # ============ FALLBACK ============
+  utter_default_en:
+    - text: "I'm not sure I understood that. Could you rephrase? Or you can:\n• Ask about transfers\n• Find branch locations\n• Check fees and rates\n• Speak to an agent"
+
+  utter_default_ar:
+    - text: "لم أفهم طلبك. هل يمكنك إعادة الصياغة؟ أو يمكنك:\n• السؤال عن الحوالات\n• البحث عن الفروع\n• الاستفسار عن الرسوم والأسعار\n• التحدث مع موظف"
+
 session_config:
   session_expiration_time: 60
   carry_over_slots_to_new_session: true
-entities:
-- food
-actions:
-- processing_order
